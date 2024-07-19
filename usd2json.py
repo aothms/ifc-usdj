@@ -61,8 +61,7 @@ class USDAtoJSON(Transformer):
     def block(self, items):
         subs = list(items[3:])
         props = functools.reduce(dict.__or__, filter(lambda d: len(d) == 1, subs), {})
-        if set(map(len, subs)) == {1}:
-            subs = list(filter(lambda d: len(d) > 1, subs))
+        subs = list(filter(lambda d: len(d) > 1, subs))
         return {
             "def": items[0].value,
             "type": items[1].value,
