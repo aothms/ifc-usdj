@@ -1,10 +1,11 @@
+import functools
 import re
 import sys
 from lark import Lark, Transformer, v_args
 import json
 
 usda_grammar = r"""
-    start: statement*
+    start: meta statement*
 
     statement: assignment
              | block
@@ -28,6 +29,8 @@ usda_grammar = r"""
     NUMBER: /-?\d+(\.\d+)?([eE][+-]?\d+)?/
     REFERENCE: /<[^>]+>/
 
+    meta: "(" (STRING | (/[A-Za-z_]+/ "=" value))+ ")"
+
     %import common.WS
     %ignore WS
     %ignore "#" /.+/
@@ -38,7 +41,7 @@ parser = Lark(usda_grammar, start='start', parser='earley')
 class USDAtoJSON(Transformer):
     def start(self, items):
         return {
-            'children': items
+            'children': [d for d in items if len(d)]
         }
     
     def statement(self, items):
@@ -56,11 +59,16 @@ class USDAtoJSON(Transformer):
         return {key: value}
     
     def block(self, items):
+        subs = list(items[3:])
+        props = functools.reduce(dict.__or__, filter(lambda d: len(d) == 1, subs), {})
+        if set(map(len, subs)) == {1}:
+            subs = list(filter(lambda d: len(d) > 1, subs))
         return {
             "def": items[0].value,
             "type": items[1].value,
             "name": items[2],
-            "children": list(items[3:])
+            "children": subs,
+            "attributes": props
         }
         
     def value(self, items):
@@ -74,6 +82,9 @@ class USDAtoJSON(Transformer):
     
     def array(self, items):
         return items
+    
+    def meta(self, items):
+        return {}
 
     @v_args(inline=True)
     def STRING(self, s):

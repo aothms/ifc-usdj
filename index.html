@@ -4,11 +4,31 @@
     <meta charset="UTF-8">
     <title>IFC USDJ Renderer</title>
     <style>
-        body { margin: 0; }
-        canvas { display: block; }
+        body { 
+            margin: 0;
+            background: gray; 
+        }
+        canvas { display: block; position: absolute; left: 200px; }
+        #controls {
+            position: absolute;
+            left: 0px;
+            width: 200px;
+            top: 0px;
+            bottom: 0px;
+        }
+        #controls div {
+            padding: 0.5em 0 0 0.5em;
+        }
+        div.disabled {
+            opacity: 0.5;
+        }
+        span.button {
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
+    <div id='controls'></div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.142.0/examples/js/controls/OrbitControls.js"></script>
     <script src="render.js"></script>
