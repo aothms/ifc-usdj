@@ -10,7 +10,7 @@ In order to assess the feasability of the USD composition workflow as a successo
 
 - An IFC to USD mapping (implemented in IfcOpenShell) that utilizes a minimal set of constructs from USD.
 - A JSON serialization for USD (`.usdj` for lack of a better name) currently implemented as a very limited transformation in python.
-- A barebones implementation of visualising `.usdj` files in JavaScript. Composing multiple layers is still work in progress.
+- A barebones implementation of visualising `.usdj` files in JavaScript. Currently also able to overlay multiple layers.
 
 Both the .usda to json transformer (python) as well as the visualizer (JavaScript) are about 100 lines of code. This highlights the drastic reduction of complexity compared to the current IFC serialization usage. Both are of course very limited in functionality and only applicable to a tiny subset of USD features.
 
